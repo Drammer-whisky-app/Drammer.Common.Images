@@ -28,4 +28,9 @@ public interface IStorageService
         string? cacheControl = null,
         bool overwrite = true,
         CancellationToken cancellationToken = default);
+
+    Task<byte[]?> DownloadImageAsync(
+        BlobContainerClient client,
+        string fileName,
+        CancellationToken cancellationToken = default);
 }

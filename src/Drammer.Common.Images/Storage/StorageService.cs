@@ -2,7 +2,6 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.VisualBasic;
 
 namespace Drammer.Common.Images.Storage;
 
@@ -45,6 +44,23 @@ internal sealed class StorageService : IStorageService
 
         var result = await blobFile.UploadAsync(BinaryData.FromBytes(data), blobOptions, cancellationToken);
         return result.GetRawResponse().Status == (int) HttpStatusCode.Created;
+    }
+
+    public async Task<byte[]?> DownloadImageAsync(
+        BlobContainerClient client,
+        string fileName,
+        CancellationToken cancellationToken = default)
+    {
+        var blobFile = client.GetBlobClient(fileName);
+        if (!await blobFile.ExistsAsync(cancellationToken))
+        {
+            return null;
+        }
+
+        await using var sourceStream = new MemoryStream();
+        await blobFile.DownloadToAsync(sourceStream, cancellationToken);
+        sourceStream.Seek(0, SeekOrigin.Begin);
+        return sourceStream.ToArray();
     }
 
     private static BlobUploadOptions CreateBlobUploadOptions(string contentType, string? cacheControl)

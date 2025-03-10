@@ -63,9 +63,43 @@ public sealed class StorageServiceTests
             .ReturnsAsync(response);
 
         // Act
-        await service.UploadImageAsync(mockBlobContainerClient.Object, imageData!, "image.webp", "image/webp");
+        var result = await service.UploadImageAsync(mockBlobContainerClient.Object, imageData!, "image.webp", "image/webp");
 
         // Assert
+        result.Should().BeFalse();
         mockBlobClient.VerifyAll();
+    }
+
+    [Fact]
+    public async Task DownloadImageAsync_ReturnsByteArray()
+    {
+        // Arrange
+        var mockBlobContainerClient = new Mock<BlobContainerClient>();
+        var mockBlobClient = new Mock<BlobClient>();
+        var service = new StorageService();
+        var imageData = TestHelpers.ReadResource(TestHelpers.ResourceName);
+
+        mockBlobContainerClient
+            .Setup(c => c.GetBlobClient(It.IsAny<string>()))
+            .Returns(mockBlobClient.Object);
+
+        mockBlobClient.Setup(
+                x => x.ExistsAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        mockBlobClient.Setup(
+            x => x.DownloadToAsync(
+                It.IsAny<Stream>(),
+                It.IsAny<CancellationToken>())).Callback<Stream, CancellationToken>(
+            (destination, cancellationToken) =>
+            {
+                destination.Write(imageData!, 0, imageData!.Length);
+            }).ReturnsAsync(Mock.Of<Response>());
+
+        // Act
+        var result = await service.DownloadImageAsync(mockBlobContainerClient.Object, "image.webp");
+
+        // Assert
+        result.Should().NotBeNull();
     }
 }
