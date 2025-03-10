@@ -19,4 +19,13 @@ public interface IStorageService
         BlobContainerClient client,
         string? prefix = null,
         CancellationToken cancellationToken = default);
+
+    Task<bool> UploadImageAsync(
+        BlobContainerClient client,
+        byte[] data,
+        string fileName,
+        string contentType,
+        string? cacheControl = null,
+        bool overwrite = true,
+        CancellationToken cancellationToken = default);
 }
