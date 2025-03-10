@@ -9,7 +9,7 @@
         <PackageId>Drammer.Common.Images</PackageId>
         <Description>This package contains common functionality that is used the Drammer whisky app.</Description>
         <PackageTags>image storage blob</PackageTags>
-        <PackageReleaseNotes>https://github.com/Drammer-whisky-app/TODO/releases</PackageReleaseNotes>
+        <PackageReleaseNotes>https://github.com/Drammer-whisky-app/Drammer.Common.Images/releases</PackageReleaseNotes>
         <Authors>Marthijn van den Heuvel,Drammer</Authors>
         <Copyright>Copyright (c) 2025 Drammer whisky app</Copyright>
 
