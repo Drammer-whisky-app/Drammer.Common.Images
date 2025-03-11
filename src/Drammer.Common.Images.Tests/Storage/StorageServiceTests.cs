@@ -71,7 +71,7 @@ public sealed class StorageServiceTests
     }
 
     [Fact]
-    public async Task DownloadImageAsync_ReturnsByteArray()
+    public async Task DownloadImageAsync_ReturnsObject()
     {
         // Arrange
         var mockBlobContainerClient = new Mock<BlobContainerClient>();
@@ -96,11 +96,17 @@ public sealed class StorageServiceTests
                 destination.Write(imageData!, 0, imageData!.Length);
             }).ReturnsAsync(Mock.Of<Response>());
 
+        mockBlobClient.Setup(x => x.GetPropertiesAsync(It.IsAny<BlobRequestConditions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(Mock.Of<BlobProperties>(), Mock.Of<Response>()));
+
         // Act
         var result = await service.DownloadImageAsync(mockBlobContainerClient.Object, "image.webp");
 
         // Assert
         result.Should().NotBeNull();
+        result.Success.Should().BeTrue();
+        result.Data!.Length.Should().Be(imageData!.Length);
+        result.FileName.Should().Be("image.webp");
     }
 
     [Fact]
