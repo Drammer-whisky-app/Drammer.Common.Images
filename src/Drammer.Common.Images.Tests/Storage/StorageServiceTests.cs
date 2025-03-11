@@ -100,7 +100,7 @@ public sealed class StorageServiceTests
             .ReturnsAsync(Response.FromValue(Mock.Of<BlobProperties>(), Mock.Of<Response>()));
 
         // Act
-        var result = await service.DownloadImageAsync(mockBlobContainerClient.Object, "image.webp");
+        var result = await service.DownloadFileAsync(mockBlobContainerClient.Object, "image.webp");
 
         // Assert
         result.Should().NotBeNull();
@@ -125,7 +125,7 @@ public sealed class StorageServiceTests
             .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
 
         // Act
-        var result = await service.DeleteImageAsync(mockBlobContainerClient.Object, "image.webp");
+        var result = await service.DeleteFileAsync(mockBlobContainerClient.Object, "image.webp");
 
         // Assert
         result.Should().BeTrue();

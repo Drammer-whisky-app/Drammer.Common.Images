@@ -53,7 +53,7 @@ internal sealed class StorageService : IStorageService
         return blobFile;
     }
 
-    public async Task<DownloadImageResult> DownloadImageAsync(
+    public async Task<DownloadImageResult> DownloadFileAsync(
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default)
@@ -80,7 +80,7 @@ internal sealed class StorageService : IStorageService
         };
     }
 
-    public async Task<bool> DeleteImageAsync(
+    public async Task<bool> DeleteFileAsync(
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default)

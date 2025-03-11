@@ -30,12 +30,12 @@ public interface IStorageService
         Dictionary<string, string>? metadata = null,
         CancellationToken cancellationToken = default);
 
-    Task<DownloadImageResult> DownloadImageAsync(
+    Task<DownloadImageResult> DownloadFileAsync(
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default);
 
-    Task<bool> DeleteImageAsync(
+    Task<bool> DeleteFileAsync(
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default);
