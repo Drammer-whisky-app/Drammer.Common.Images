@@ -29,6 +29,8 @@
     <ItemGroup>
       <None Remove="Resources\DALL·E 2025-03-10 16.25.30.webp" />
       <EmbeddedResource Include="Resources\DALL·E 2025-03-10 16.25.30.webp" />
+      <None Remove="Resources\DALL·E 2025-03-11 08.49.42.webp" />
+      <EmbeddedResource Include="Resources\DALL·E 2025-03-11 08.49.42.webp" />
     </ItemGroup>
 
 </Project>

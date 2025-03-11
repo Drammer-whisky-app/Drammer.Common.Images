@@ -48,7 +48,7 @@ public sealed class StorageServiceTests
         var mockBlobContainerClient = new Mock<BlobContainerClient>();
         var mockBlobClient = new Mock<BlobClient>();
         var service = new StorageService();
-        var imageData = TestHelpers.ReadResource(TestHelpers.ResourceName);
+        var imageData = TestHelpers.ReadResource(TestHelpers.ResourceName1);
         var response = Response.FromValue(Mock.Of<BlobContentInfo>(), Mock.Of<Response>());
 
         mockBlobContainerClient
@@ -77,7 +77,7 @@ public sealed class StorageServiceTests
         var mockBlobContainerClient = new Mock<BlobContainerClient>();
         var mockBlobClient = new Mock<BlobClient>();
         var service = new StorageService();
-        var imageData = TestHelpers.ReadResource(TestHelpers.ResourceName);
+        var imageData = TestHelpers.ReadResource(TestHelpers.ResourceName1);
 
         mockBlobContainerClient
             .Setup(c => c.GetBlobClient(It.IsAny<string>()))
