@@ -20,16 +20,22 @@ public interface IStorageService
         string? prefix = null,
         CancellationToken cancellationToken = default);
 
-    Task<bool> UploadImageAsync(
+    Task<BlobClient> UploadImageAsync(
         BlobContainerClient client,
         byte[] data,
         string fileName,
         string contentType,
         string? cacheControl = null,
         bool overwrite = true,
+        Dictionary<string, string>? metadata = null,
         CancellationToken cancellationToken = default);
 
-    Task<byte[]?> DownloadImageAsync(
+    Task<DownloadImageResult> DownloadImageAsync(
+        BlobContainerClient client,
+        string fileName,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteImageAsync(
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default);

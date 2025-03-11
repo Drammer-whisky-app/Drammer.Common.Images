@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Azure;
+﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
@@ -25,13 +24,14 @@ internal sealed class StorageService : IStorageService
         return result;
     }
 
-    public async Task<bool> UploadImageAsync(
+    public async Task<BlobClient> UploadImageAsync(
         BlobContainerClient client,
         byte[] data,
         string fileName,
         string contentType,
         string? cacheControl = null,
         bool overwrite = true,
+        Dictionary<string, string>? metadata = null,
         CancellationToken cancellationToken = default)
     {
         var blobFile = client.GetBlobClient(fileName);
@@ -42,11 +42,17 @@ internal sealed class StorageService : IStorageService
             blobOptions.Conditions = new BlobRequestConditions {IfNoneMatch = ETag.All};
         }
 
-        var result = await blobFile.UploadAsync(BinaryData.FromBytes(data), blobOptions, cancellationToken);
-        return result.GetRawResponse().Status == (int) HttpStatusCode.Created;
+        _ = await blobFile.UploadAsync(BinaryData.FromBytes(data), blobOptions, cancellationToken);
+
+        if (metadata != null)
+        {
+            _ = await blobFile.SetMetadataAsync(metadata, cancellationToken: cancellationToken);
+        }
+
+        return blobFile;
     }
 
-    public async Task<byte[]?> DownloadImageAsync(
+    public async Task<DownloadImageResult> DownloadImageAsync(
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default)
@@ -54,13 +60,33 @@ internal sealed class StorageService : IStorageService
         var blobFile = client.GetBlobClient(fileName);
         if (!await blobFile.ExistsAsync(cancellationToken))
         {
-            return null;
+            return new DownloadImageResult
+            {
+                FileName = fileName
+            };
         }
+
+        var metaData = await blobFile.GetPropertiesAsync(cancellationToken: cancellationToken);
 
         await using var sourceStream = new MemoryStream();
         await blobFile.DownloadToAsync(sourceStream, cancellationToken);
-        sourceStream.Seek(0, SeekOrigin.Begin);
-        return sourceStream.ToArray();
+
+        return new DownloadImageResult
+        {
+            FileName = fileName,
+            Data = sourceStream.ToArray(),
+            Metadata = metaData.Value.Metadata,
+        };
+    }
+
+    public async Task<bool> DeleteImageAsync(
+        BlobContainerClient client,
+        string fileName,
+        CancellationToken cancellationToken = default)
+    {
+        var blobClient = client.GetBlobClient(fileName);
+        var result = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
+        return result.Value;
     }
 
     private static BlobUploadOptions CreateBlobUploadOptions(string contentType, string? cacheControl)

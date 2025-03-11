@@ -66,7 +66,7 @@ public sealed class StorageServiceTests
         var result = await service.UploadImageAsync(mockBlobContainerClient.Object, imageData!, "image.webp", "image/webp");
 
         // Assert
-        result.Should().BeFalse();
+        result.Should().NotBeNull();
         mockBlobClient.VerifyAll();
     }
 
@@ -101,5 +101,27 @@ public sealed class StorageServiceTests
 
         // Assert
         result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task DeleteImageAsync_ReturnsTrue()
+    {
+        // Arrange
+        var mockBlobContainerClient = new Mock<BlobContainerClient>();
+        var mockBlobClient = new Mock<BlobClient>();
+        var service = new StorageService();
+
+        mockBlobContainerClient
+            .Setup(c => c.GetBlobClient(It.IsAny<string>()))
+            .Returns(mockBlobClient.Object);
+
+        mockBlobClient.Setup(x => x.DeleteIfExistsAsync(It.IsAny<DeleteSnapshotsOption>(), It.IsAny<BlobRequestConditions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        // Act
+        var result = await service.DeleteImageAsync(mockBlobContainerClient.Object, "image.webp");
+
+        // Assert
+        result.Should().BeTrue();
     }
 }
