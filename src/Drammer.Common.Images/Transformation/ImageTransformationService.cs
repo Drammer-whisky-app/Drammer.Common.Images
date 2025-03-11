@@ -10,15 +10,13 @@ internal sealed class ImageTransformationService : IImageTransformationService
 {
     public async Task<ResizeResult> ResizeAsync(
         byte[] imageData,
-        string originalFileName,
         ResizeOptions options,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(imageData);
         ArgumentNullException.ThrowIfNull(options);
-        ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
 
-        var (contentType, extension) = originalFileName.GetContentType();
+        var imageFormat = Image.DetectFormat(imageData);
         var width = options.Width;
         var height = options.Height;
 
@@ -55,7 +53,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
 
         var result = await SaveImageAsync(
             image,
-            options.TargetContentType ?? contentType,
+            options.TargetContentType ?? imageFormat.DefaultMimeType,
             options.ImageQuality,
             cancellationToken).ConfigureAwait(false);
 
@@ -69,16 +67,13 @@ internal sealed class ImageTransformationService : IImageTransformationService
 
     public async Task<ResizeResult> SquareImageAsync(
         byte[] imageData,
-        string originalFileName,
         SquareImageOptions options,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(imageData);
         ArgumentNullException.ThrowIfNull(options);
-        ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
 
-        var (contentType, extension) = originalFileName.GetContentType();
-
+        var imageFormat = Image.DetectFormat(imageData);
         using var image = Image.Load(imageData);
         var maxSize = Math.Max(image.Width, image.Height);
 
@@ -91,7 +86,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
 
         var result = await SaveImageAsync(
             image,
-            options.TargetContentType ?? contentType,
+            options.TargetContentType ?? imageFormat.DefaultMimeType,
             options.ImageQuality,
             cancellationToken).ConfigureAwait(false);
 

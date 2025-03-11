@@ -19,7 +19,6 @@ public sealed class ImageTransformationServiceTests
         // Act
         var result = await service.ResizeAsync(
             resourceImage,
-            "image.webp",
             new ResizeOptions
             {
                 Width = targetWidth,
@@ -53,7 +52,6 @@ public sealed class ImageTransformationServiceTests
         // Act
         var result = await service.ResizeAsync(
             resourceImage,
-            "image.webp",
             new ResizeOptions
             {
                 Width = null,
@@ -85,7 +83,6 @@ public sealed class ImageTransformationServiceTests
         // Act
         var result = await service.ResizeAsync(
             resourceImage,
-            "image.webp",
             new ResizeOptions
             {
                 Width = null,
@@ -116,7 +113,6 @@ public sealed class ImageTransformationServiceTests
         // Act
         var result = await service.SquareImageAsync(
             resourceImage,
-            "image.webp",
             new SquareImageOptions());
 
         // Assert
