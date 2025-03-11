@@ -2,7 +2,7 @@
 
 namespace Drammer.Common.Images.Tests.Transformation;
 
-public sealed class ImageDimensionsExtensionsTests
+public sealed class ImageSizeExtensionsTests
 {
     [Theory]
     [InlineData(50, 25)]
@@ -11,7 +11,7 @@ public sealed class ImageDimensionsExtensionsTests
     public void Resize_WithTargetWith_ReturnsResizedResult(int height, int expectedHeight)
     {
         // Arrange
-        var originalDimensions = new ImageDimensions(100, height);
+        var originalDimensions = new ImageSize(100, height);
         const int TargetWidth = 50;
 
         // Act
@@ -26,7 +26,7 @@ public sealed class ImageDimensionsExtensionsTests
     public void Resize_WithTargetHeight_ReturnsResizedResult()
     {
         // Arrange
-        var originalDimensions = new ImageDimensions(200, 100);
+        var originalDimensions = new ImageSize(200, 100);
         const int TargetHeight = 50;
 
         // Act

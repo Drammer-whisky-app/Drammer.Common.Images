@@ -19,13 +19,10 @@ internal sealed class ImageTransformationService : IImageTransformationService
         ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
 
         var (contentType, extension) = originalFileName.GetContentType();
-
         var width = options.Width;
         var height = options.Height;
 
         using var image = Image.Load(imageData);
-
-        var imageDimensions = new ImageDimensions(image.Width, image.Height);
 
         // do not enlarge the image
         if (width.HasValue && width > image.Width)
@@ -38,9 +35,23 @@ internal sealed class ImageTransformationService : IImageTransformationService
             height = image.Height;
         }
 
-        var resizeResult = imageDimensions.Resize(width, height);
+        // set original image size
+        if (width == null && height == null)
+        {
+            width = image.Width;
+            height = image.Height;
+        }
 
-        image.Mutate(x => x.Resize(resizeResult.Width, resizeResult.Height));
+        var imageSize = new ImageSize(image.Width, image.Height);
+        var resizeResult = imageSize.Resize(width, height);
+        if (options.AutoOrient)
+        {
+            image.Mutate(x => x.AutoOrient().Resize(resizeResult.Width, resizeResult.Height));
+        }
+        else
+        {
+            image.Mutate(x => x.Resize(resizeResult.Width, resizeResult.Height));
+        }
 
         var result = await SaveImageAsync(
             image,

@@ -1,8 +1,8 @@
 ﻿namespace Drammer.Common.Images.Transformation;
 
-internal sealed class ImageDimensions
+internal sealed class ImageSize
 {
-    public ImageDimensions(int width, int height)
+    public ImageSize(int width, int height)
     {
         Width = width;
         Height = height;

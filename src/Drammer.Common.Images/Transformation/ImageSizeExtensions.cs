@@ -2,13 +2,13 @@
 
 namespace Drammer.Common.Images.Transformation;
 
-internal static class ImageDimensionsExtensions
+internal static class ImageSizeExtensions
 {
-    public static (int Width, int Height) Resize(this ImageDimensions imageDimensions, int? width = null, int? height = null)
+    public static (int Width, int Height) Resize(this ImageSize imageSize, int? width = null, int? height = null)
     {
         if (width == null && height == null)
         {
-            return (imageDimensions.Width, imageDimensions.Height);
+            return (imageSize.Width, imageSize.Height);
         }
 
         var newWidth = width;
@@ -17,7 +17,7 @@ internal static class ImageDimensionsExtensions
         if (width.HasValue && height.HasValue)
         {
             // is landscape?
-            if (imageDimensions.Width >= imageDimensions.Height)
+            if (imageSize.Width >= imageSize.Height)
             {
                 // set height to null to maintain aspect ratio
                 newHeight = null;
@@ -32,14 +32,14 @@ internal static class ImageDimensionsExtensions
 
         if (newWidth.HasValue)
         {
-            var ratio = (double)imageDimensions.Width / newWidth.Value;
-            return ((int)Math.Round(imageDimensions.Width / ratio), (int)Math.Round(imageDimensions.Height / ratio));
+            var ratio = (double)imageSize.Width / newWidth.Value;
+            return ((int)Math.Round(imageSize.Width / ratio), (int)Math.Round(imageSize.Height / ratio));
         }
 
         if (newHeight.HasValue)
         {
-            var ratio = (double)imageDimensions.Height / newHeight.Value;
-            return ((int)Math.Round(imageDimensions.Width / ratio), (int)Math.Round(imageDimensions.Height / ratio));
+            var ratio = (double)imageSize.Height / newHeight.Value;
+            return ((int)Math.Round(imageSize.Width / ratio), (int)Math.Round(imageSize.Height / ratio));
         }
 
         throw new UnreachableException();
