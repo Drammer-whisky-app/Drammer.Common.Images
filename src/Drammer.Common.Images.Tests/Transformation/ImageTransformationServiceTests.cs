@@ -33,6 +33,10 @@ public sealed class ImageTransformationServiceTests
         var image = Image.Load(result.Data);
         image.Width.Should().Be(targetWidth);
         image.Height.Should().Be(expectedHeight);
+
+        var imageFormat = Image.DetectFormat(result.Data);
+        imageFormat.Should().NotBeNull();
+        imageFormat.DefaultMimeType.Should().Be("image/webp");
     }
 
     [Theory]
@@ -63,6 +67,39 @@ public sealed class ImageTransformationServiceTests
         var image = Image.Load(result.Data);
         image.Width.Should().Be(expectedWidth);
         image.Height.Should().Be(targetHeight);
+
+        var imageFormat = Image.DetectFormat(result.Data);
+        imageFormat.Should().NotBeNull();
+        imageFormat.DefaultMimeType.Should().Be("image/webp");
+    }
+
+    [Fact]
+    public async Task ResizeAsync_WithTargetContentType_ReturnsResizedImage()
+    {
+        // Arrange
+        var resourceImage = TestHelpers.ReadResource(TestHelpers.ResourceName1);
+        resourceImage.Should().NotBeNull();
+
+        var service = new ImageTransformationService();
+
+        // Act
+        var result = await service.ResizeAsync(
+            resourceImage,
+            "image.webp",
+            new ResizeOptions
+            {
+                Width = null,
+                Height = 20,
+                TargetContentType = "image/jpeg",
+            });
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Success.Should().BeTrue();
+
+        var imageFormat = Image.DetectFormat(result.Data);
+        imageFormat.Should().NotBeNull();
+        imageFormat.DefaultMimeType.Should().Be("image/jpeg");
     }
 
     [Theory]
@@ -89,5 +126,9 @@ public sealed class ImageTransformationServiceTests
         var image = Image.Load(result.Data);
         image.Width.Should().Be(expectedSize);
         image.Height.Should().Be(expectedSize);
+
+        var imageFormat = Image.DetectFormat(result.Data);
+        imageFormat.Should().NotBeNull();
+        imageFormat.DefaultMimeType.Should().Be("image/webp");
     }
 }
