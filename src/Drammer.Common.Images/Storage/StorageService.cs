@@ -69,13 +69,13 @@ internal sealed class StorageService : IStorageService
         var metaData = await blobFile.GetPropertiesAsync(cancellationToken: cancellationToken);
 
         await using var sourceStream = new MemoryStream();
-        await blobFile.DownloadToAsync(sourceStream, cancellationToken);
+        _ = await blobFile.DownloadToAsync(sourceStream, cancellationToken);
 
         return new DownloadImageResult
         {
             FileName = fileName,
             Data = sourceStream.ToArray(),
-            Metadata = metaData.Value.Metadata,
+            Metadata = metaData.Value.Metadata.AsReadOnly(),
         };
     }
 
