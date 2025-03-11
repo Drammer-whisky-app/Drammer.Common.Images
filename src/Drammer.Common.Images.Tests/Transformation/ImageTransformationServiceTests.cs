@@ -131,4 +131,24 @@ public sealed class ImageTransformationServiceTests
         imageFormat.Should().NotBeNull();
         imageFormat.DefaultMimeType.Should().Be("image/webp");
     }
+
+    [Fact]
+    public async Task RotateAsync_ReturnsRotatedImage()
+    {
+        // Arrange
+        var resourceImage = TestHelpers.ReadResource(TestHelpers.ResourceName2);
+        resourceImage.Should().NotBeNull();
+
+        var service = new ImageTransformationService();
+
+        // Act
+        var result = await service.RotateAsync(resourceImage);
+
+        // Assert
+        result.Should().NotBeNull();
+
+        var rotatedImage = Image.Load(result);
+        rotatedImage.Width.Should().Be(TestHelpers.HeightFile2);
+        rotatedImage.Height.Should().Be(TestHelpers.WidthFile2);
+    }
 }

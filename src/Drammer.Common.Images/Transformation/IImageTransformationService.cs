@@ -32,4 +32,13 @@ public interface IImageTransformationService
         string originalFileName,
         SquareImageOptions options,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Rotates an image.
+    /// </summary>
+    /// <param name="imageData"></param>
+    /// <param name="degrees"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<byte[]> RotateAsync(byte[] imageData, int degrees = 90, CancellationToken cancellationToken = default);
 }

@@ -103,6 +103,19 @@ internal sealed class ImageTransformationService : IImageTransformationService
         };
     }
 
+    public async Task<byte[]> RotateAsync(
+        byte[] imageData,
+        int degrees = 90,
+        CancellationToken cancellationToken = default)
+    {
+        var imageFormat = Image.DetectFormat(imageData);
+        var image = Image.Load(imageData);
+        image.Mutate(x => x.Rotate(degrees));
+        using var ms = new MemoryStream();
+        await image.SaveAsync(ms, imageFormat, cancellationToken).ConfigureAwait(false);
+        return ms.ToArray();
+    }
+
     private static async Task<ResizeResult> SaveImageAsync(
         Image image,
         string targetContentType,
