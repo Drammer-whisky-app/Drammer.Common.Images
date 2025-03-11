@@ -1,7 +1,14 @@
 ﻿namespace Drammer.Common.Images.Transformation;
 
-internal static class FileNameExtensions
+public static class FileNameExtensions
 {
+    /// <summary>
+    /// Gets the content type and extension of a file.
+    /// </summary>
+    /// <param name="filename">The file name.</param>
+    /// <returns>The content type and extension (including dot).</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="NotSupportedException"></exception>
     public static (string ContentType, string Extension) GetContentType(this string? filename)
     {
         if (string.IsNullOrWhiteSpace(filename))
