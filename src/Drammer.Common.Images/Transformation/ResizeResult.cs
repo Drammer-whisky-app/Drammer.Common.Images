@@ -22,6 +22,6 @@ public sealed class ResizeResult
     /// <summary>
     /// Gets a value indicating whether the operation was successful.
     /// </summary>
-    [MemberNotNullWhen(true)]
+    [MemberNotNullWhen(true, nameof(Data))]
     public bool Success => Data != null;
 }
