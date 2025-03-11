@@ -130,4 +130,27 @@ public sealed class StorageServiceTests
         // Assert
         result.Should().BeTrue();
     }
+
+    [Fact]
+    public async Task DeleteImageAsync_FromUri_ReturnsTrue()
+    {
+        // Arrange
+        var mockBlobContainerClient = new Mock<BlobContainerClient>();
+        var mockBlobClient = new Mock<BlobClient>();
+        var service = new StorageService();
+        var uri = new Uri("https://localhost.com/container/image.webp");
+
+        mockBlobContainerClient
+            .Setup(c => c.GetBlobClient(It.IsAny<string>()))
+            .Returns(mockBlobClient.Object);
+
+        mockBlobClient.Setup(x => x.DeleteIfExistsAsync(It.IsAny<DeleteSnapshotsOption>(), It.IsAny<BlobRequestConditions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+
+        // Act
+        var result = await service.DeleteFileAsync(mockBlobContainerClient.Object, uri);
+
+        // Assert
+        result.Should().BeTrue();
+    }
 }

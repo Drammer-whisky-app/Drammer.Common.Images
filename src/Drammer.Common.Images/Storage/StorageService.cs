@@ -86,10 +86,17 @@ internal sealed class StorageService : IStorageService
         string fileName,
         CancellationToken cancellationToken = default)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
         var blobClient = client.GetBlobClient(fileName);
         var result = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
         return result.Value;
     }
+
+    public Task<bool> DeleteFileAsync(
+        BlobContainerClient client,
+        Uri uri,
+        CancellationToken cancellationToken = default) =>
+        DeleteFileAsync(client, new BlobClient(uri).Name, cancellationToken);
 
     private static BlobUploadOptions CreateBlobUploadOptions(string contentType, string? cacheControl)
     {

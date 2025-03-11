@@ -41,4 +41,9 @@ public interface IStorageService
         BlobContainerClient client,
         string fileName,
         CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteFileAsync(
+        BlobContainerClient client,
+        Uri uri,
+        CancellationToken cancellationToken = default);
 }
