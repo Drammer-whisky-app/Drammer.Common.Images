@@ -25,7 +25,7 @@ internal sealed class WaterMarkService : IWaterMarkService
                 new GraphicsOptions {AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver}));
 
         await using var targetStream = new MemoryStream();
-        await img.SaveAsync(targetStream, new WebpEncoder(), cancellationToken);
+        await img.SaveAsync(targetStream, new WebpEncoder(), cancellationToken).ConfigureAwait(false);
 
         return targetStream.ToArray();
     }

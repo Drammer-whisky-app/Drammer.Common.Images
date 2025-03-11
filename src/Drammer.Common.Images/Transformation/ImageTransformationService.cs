@@ -46,7 +46,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
             image,
             options.TargetContentType ?? contentType,
             options.ImageQuality,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
         return new ResizeResult
         {
@@ -82,7 +82,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
             image,
             options.TargetContentType ?? contentType,
             options.ImageQuality,
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
 
         return new ResizeResult
         {
@@ -104,7 +104,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
         if (targetContentType is "image/jpg" or "image/jpeg")
         {
             extension = ".jpg";
-            await image.SaveAsync(ms, new JpegEncoder {Quality = imageQuality}, cancellationToken);
+            await image.SaveAsync(ms, new JpegEncoder {Quality = imageQuality}, cancellationToken).ConfigureAwait(false);
             resizeBytes = ms.ToArray();
             targetContentType = "image/jpeg";
         }
@@ -115,13 +115,13 @@ internal sealed class ImageTransformationService : IImageTransformationService
                 ms,
                 new WebpEncoder
                     {Quality = imageQuality ?? 75, TransparentColorMode = WebpTransparentColorMode.Preserve},
-                cancellationToken);
+                cancellationToken).ConfigureAwait(false);
             resizeBytes = ms.ToArray();
         }
         else if (targetContentType == "image/png")
         {
             extension = ".png";
-            await image.SaveAsync(ms, new PngEncoder(), cancellationToken);
+            await image.SaveAsync(ms, new PngEncoder(), cancellationToken).ConfigureAwait(false);
             resizeBytes = ms.ToArray();
         }
         else

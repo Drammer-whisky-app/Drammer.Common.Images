@@ -42,11 +42,12 @@ internal sealed class StorageService : IStorageService
             blobOptions.Conditions = new BlobRequestConditions {IfNoneMatch = ETag.All};
         }
 
-        _ = await blobFile.UploadAsync(BinaryData.FromBytes(data), blobOptions, cancellationToken);
+        _ = await blobFile.UploadAsync(BinaryData.FromBytes(data), blobOptions, cancellationToken)
+            .ConfigureAwait(false);
 
         if (metadata != null)
         {
-            _ = await blobFile.SetMetadataAsync(metadata, cancellationToken: cancellationToken);
+            _ = await blobFile.SetMetadataAsync(metadata, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         return blobFile;
@@ -58,7 +59,7 @@ internal sealed class StorageService : IStorageService
         CancellationToken cancellationToken = default)
     {
         var blobFile = client.GetBlobClient(fileName);
-        if (!await blobFile.ExistsAsync(cancellationToken))
+        if (!await blobFile.ExistsAsync(cancellationToken).ConfigureAwait(false))
         {
             return new DownloadImageResult
             {
@@ -66,10 +67,10 @@ internal sealed class StorageService : IStorageService
             };
         }
 
-        var metaData = await blobFile.GetPropertiesAsync(cancellationToken: cancellationToken);
+        var metaData = await blobFile.GetPropertiesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         await using var sourceStream = new MemoryStream();
-        _ = await blobFile.DownloadToAsync(sourceStream, cancellationToken);
+        _ = await blobFile.DownloadToAsync(sourceStream, cancellationToken).ConfigureAwait(false);
 
         return new DownloadImageResult
         {
@@ -85,7 +86,7 @@ internal sealed class StorageService : IStorageService
         CancellationToken cancellationToken = default)
     {
         var blobClient = client.GetBlobClient(fileName);
-        var result = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
+        var result = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
         return result.Value;
     }
 
