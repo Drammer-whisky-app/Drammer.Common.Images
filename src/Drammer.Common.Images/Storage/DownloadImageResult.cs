@@ -23,8 +23,14 @@ public sealed class DownloadImageResult
     public IReadOnlyDictionary<string, string> Metadata { get; init; } = new Dictionary<string, string>();
 
     /// <summary>
+    /// Gets the content type.
+    /// </summary>
+    public string? ContentType { get; init; }
+
+    /// <summary>
     /// Gets a value indicating whether the download was successful.
     /// </summary>
     [MemberNotNullWhen(true, nameof(Data))]
+    [MemberNotNullWhen(true, nameof(ContentType))]
     public bool Success => Data != null;
 }

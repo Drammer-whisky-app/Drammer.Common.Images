@@ -78,6 +78,7 @@ internal sealed class StorageService : IStorageService
             FileName = fileName,
             Data = sourceStream.ToArray(),
             Metadata = metaData.Value.Metadata.AsReadOnly(),
+            ContentType = metaData.Value.ContentType,
         };
     }
 
