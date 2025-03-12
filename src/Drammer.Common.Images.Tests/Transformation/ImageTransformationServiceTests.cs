@@ -129,6 +129,37 @@ public sealed class ImageTransformationServiceTests
     }
 
     [Fact]
+    public async Task SquareImageAsync_WithSizeFunc_ReturnsImage()
+    {
+        // Arrange
+        var resourceImage = TestHelpers.ReadResource(TestHelpers.ResourceName2);
+        resourceImage.Should().NotBeNull();
+        var options = new SquareImageOptions
+        {
+            SizeFunc = size => Math.Max(size.width, size.height) + (size.height / 50)
+        };
+
+        var service = new ImageTransformationService();
+
+        // Act
+        var result = await service.SquareImageAsync(
+            resourceImage,
+            options);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Success.Should().BeTrue();
+
+        var image = Image.Load(result.Data);
+        image.Width.Should().BeGreaterThan(TestHelpers.WidthFile2);
+        image.Height.Should().BeGreaterThan(TestHelpers.WidthFile2);
+
+        var imageFormat = Image.DetectFormat(result.Data);
+        imageFormat.Should().NotBeNull();
+        imageFormat.DefaultMimeType.Should().Be("image/webp");
+    }
+
+    [Fact]
     public async Task RotateAsync_ReturnsRotatedImage()
     {
         // Arrange

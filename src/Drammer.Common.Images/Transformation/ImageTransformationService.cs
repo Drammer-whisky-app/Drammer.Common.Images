@@ -77,11 +77,16 @@ internal sealed class ImageTransformationService : IImageTransformationService
         using var image = Image.Load(imageData);
         var maxSize = Math.Max(image.Width, image.Height);
 
+        if (options.SizeFunc != null)
+        {
+            maxSize = options.SizeFunc((image.Width, image.Height));
+        }
+
         image.Mutate(
             x => x.Resize(
                 new SixLabors.ImageSharp.Processing.ResizeOptions
                 {
-                    Mode = ResizeMode.BoxPad, Size = new Size(maxSize), PadColor = Color.White,
+                    Mode = ResizeMode.BoxPad, Size = new Size(maxSize), PadColor = options.PadColor,
                 }).BackgroundColor(Color.White));
 
         var result = await SaveImageAsync(
