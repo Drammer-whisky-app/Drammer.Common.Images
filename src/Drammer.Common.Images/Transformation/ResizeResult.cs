@@ -17,7 +17,7 @@ public sealed class ResizeResult
     /// <summary>
     /// Gets the file extension (with the dot).
     /// </summary>
-    public string? Extension { get; init; }
+    public required string Extension { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the operation was successful.
