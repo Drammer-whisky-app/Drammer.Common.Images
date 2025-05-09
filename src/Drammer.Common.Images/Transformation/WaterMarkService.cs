@@ -5,8 +5,12 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Drammer.Common.Images.Transformation;
 
-internal sealed class WaterMarkService : IWaterMarkService
+/// <summary>
+/// The watermark service.
+/// </summary>
+public sealed class WaterMarkService : IWaterMarkService
 {
+    /// <inheritdoc />
     public async Task<byte[]> AddWaterMarkAsync(
         byte[] image,
         byte[] waterMark,
