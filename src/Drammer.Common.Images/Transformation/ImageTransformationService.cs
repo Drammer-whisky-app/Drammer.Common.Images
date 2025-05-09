@@ -6,8 +6,12 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Drammer.Common.Images.Transformation;
 
-internal sealed class ImageTransformationService : IImageTransformationService
+/// <summary>
+/// The image transformation service.
+/// </summary>
+public sealed class ImageTransformationService : IImageTransformationService
 {
+    /// <inheritdoc />
     public async Task<ResizeResult> ResizeAsync(
         byte[] imageData,
         ResizeOptions options,
@@ -65,6 +69,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
         };
     }
 
+    /// <inheritdoc />
     public async Task<ResizeResult> SquareImageAsync(
         byte[] imageData,
         SquareImageOptions options,
@@ -103,6 +108,7 @@ internal sealed class ImageTransformationService : IImageTransformationService
         };
     }
 
+    /// <inheritdoc />
     public async Task<byte[]> RotateAsync(
         byte[] imageData,
         int degrees = 90,

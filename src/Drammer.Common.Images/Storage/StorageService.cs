@@ -4,8 +4,12 @@ using Azure.Storage.Blobs.Models;
 
 namespace Drammer.Common.Images.Storage;
 
-internal sealed class StorageService : IStorageService
+/// <summary>
+/// The storage service.
+/// </summary>
+public sealed class StorageService : IStorageService
 {
+    /// <inheritdoc />
     public async Task<IReadOnlyList<BlobItem>> GetAllBlobsAsync(
         BlobContainerClient client,
         BlobTraits traits = BlobTraits.None,
@@ -25,6 +29,7 @@ internal sealed class StorageService : IStorageService
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<BlobClient> UploadImageAsync(
         BlobContainerClient client,
         byte[] data,
@@ -54,6 +59,7 @@ internal sealed class StorageService : IStorageService
         return blobFile;
     }
 
+    /// <inheritdoc />
     public async Task<DownloadImageResult> DownloadFileAsync(
         BlobContainerClient client,
         string fileName,
@@ -82,6 +88,7 @@ internal sealed class StorageService : IStorageService
         };
     }
 
+    /// <inheritdoc />
     public async Task<bool> DeleteFileAsync(
         BlobContainerClient client,
         string fileName,
@@ -93,6 +100,7 @@ internal sealed class StorageService : IStorageService
         return result.Value;
     }
 
+    /// <inheritdoc />
     public Task<bool> DeleteFileAsync(
         BlobContainerClient client,
         Uri uri,
