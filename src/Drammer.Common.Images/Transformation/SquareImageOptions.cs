@@ -23,6 +23,11 @@ public sealed class SquareImageOptions
     public Color PadColor { get; init; } = Color.Transparent;
 
     /// <summary>
+    /// Gets a value indicating whether the transformation should be lossless for webp files.
+    /// </summary>
+    public bool WebpLossless { get; init; } = true;
+
+    /// <summary>
     /// Gets a func to determine the size of the squared image.
     /// The input is the original image size and the output is the size (widht and height) of the squared image.
     /// </summary>

@@ -59,6 +59,7 @@ public sealed class ImageTransformationService : IImageTransformationService
             image,
             options.TargetContentType ?? imageFormat.DefaultMimeType,
             options.ImageQuality,
+            options.WebpLossless,
             cancellationToken).ConfigureAwait(false);
 
         return new ResizeResult
@@ -98,6 +99,7 @@ public sealed class ImageTransformationService : IImageTransformationService
             image,
             options.TargetContentType ?? imageFormat.DefaultMimeType,
             options.ImageQuality,
+            options.WebpLossless,
             cancellationToken).ConfigureAwait(false);
 
         return new ResizeResult
@@ -126,6 +128,7 @@ public sealed class ImageTransformationService : IImageTransformationService
         Image image,
         string targetContentType,
         int? imageQuality,
+        bool webPLossless,
         CancellationToken cancellationToken = default)
     {
         using var ms = new MemoryStream();
@@ -144,7 +147,12 @@ public sealed class ImageTransformationService : IImageTransformationService
             await image.SaveAsync(
                 ms,
                 new WebpEncoder
-                    {Quality = imageQuality ?? 75, TransparentColorMode = WebpTransparentColorMode.Preserve},
+                {
+                    Quality = imageQuality ?? 75,
+                    TransparentColorMode = WebpTransparentColorMode.Preserve,
+                    FileFormat = webPLossless ? WebpFileFormatType.Lossless : WebpFileFormatType.Lossy,
+                    NearLossless = true
+                },
                 cancellationToken).ConfigureAwait(false);
             resizeBytes = ms.ToArray();
         }

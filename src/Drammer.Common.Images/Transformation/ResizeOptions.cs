@@ -31,4 +31,9 @@ public sealed class ResizeOptions
     /// Gets a value indicating whether the image should be auto-oriented.
     /// </summary>
     public bool AutoOrient { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether the transformation should be lossless for webp files.
+    /// </summary>
+    public bool WebpLossless { get; init; } = true;
 }
