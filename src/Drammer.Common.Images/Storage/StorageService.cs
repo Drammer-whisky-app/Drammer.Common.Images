@@ -13,13 +13,15 @@ public sealed class StorageService : IStorageService
     public async Task<IReadOnlyList<BlobItem>> GetAllBlobsAsync(
         BlobContainerClient client,
         BlobTraits traits = BlobTraits.None,
+        BlobStates states = BlobStates.None,
         string? prefix = null,
         CancellationToken cancellationToken = default)
     {
         var result = new List<BlobItem>();
         var fileEnumerator = client.GetBlobsAsync(
             traits,
-            prefix: prefix,
+            states,
+            prefix,
             cancellationToken: cancellationToken);
         await foreach (var blobItem in fileEnumerator)
         {
